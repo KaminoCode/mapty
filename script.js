@@ -127,6 +127,11 @@ class App {
 
     // Handling clicks on map
     this.#map.on('click', this._showForm.bind(this));
+
+    // Render markers from the local storage data
+    this.#workouts.forEach(work => {
+      this._renderWorkoutMarker(work);
+    });
   }
 
   _showForm(mapE) {
@@ -302,8 +307,20 @@ class App {
   }
 
   _getLocalStorage() {
-    const data = localStorage.getItem('workout');
+    const data = JSON.parse(localStorage.getItem('workouts'));
     console.log(data);
+
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(work => {
+      this._renderWorkout(work);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload();
   }
 }
 
